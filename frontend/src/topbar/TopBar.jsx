@@ -3,7 +3,7 @@ import './topbar.css'
 
 const TopBar = () => {
     return (
-      <div>
+      <>
         <div className="top">
           <div className="topLeft">
             <i className=" topIcon fab fa-facebook"></i>
@@ -31,7 +31,7 @@ const TopBar = () => {
             <i className="topSearchIcon fas fa-search"></i>
           </div>
         </div>
-      </div>
+      </>
     );
 };
 
