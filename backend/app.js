@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
+const multer = require('multer')
 
 require('dotenv').config();
 
@@ -39,6 +40,30 @@ mongoose
   )
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+//  Multer Config
+
+const MIME_TYPES = {
+  'image/jpg': 'jpg',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+};
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, callback) => {
+    const name = file.originalname.split(' ').join('_');
+    const extension = MIME_TYPES[file.mimetype];
+    callback(null, name + Date.now() + '.' + extension);
+  },
+});
+
+const upload = multer({ storage: storage });
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  res.status(200).json('Fichier bien importé');
+});
 
 
 // Body-parser
