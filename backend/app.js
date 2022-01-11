@@ -1,10 +1,16 @@
 const express = require("express");
-const app = express();
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const path = require('path');
+const helmet = require('helmet');
+
+require('dotenv').config();
+
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+
+const app = express();
 
 
-dotenv.config();
 
 // CORS configuration
 
@@ -29,7 +35,7 @@ app.use(helmet());
 
 mongoose
   .connect(process.env.SECRET_DB,
-    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
@@ -40,9 +46,10 @@ mongoose
 app.use(express.json());
 
 
+// Routes
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/auth', userRoutes);
+app.use('/api/posts', postRoutes);
 
-
-app.listen('3000' , () => {
-    console.log('Backend is running on port 3000');
-})
+module.exports = app;
