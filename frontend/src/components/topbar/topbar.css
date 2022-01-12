@@ -11,6 +11,7 @@
     flex-wrap: wrap;
     align-items: center;
     font-family: 'Roboto', sans-serif;
+    z-index: 999;
 }
 
 .topCenter {
