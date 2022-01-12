@@ -6,8 +6,6 @@ const Login = () => {
     <div className="login">
       <h2 className="loginTitle">Connection</h2>
       <form className="loginForm">
-        <label>Pseudo</label>
-        <input type="text" className="loginInput" placeholder="Pseudo" />
         <label>Email</label>
         <input
           type="text"
@@ -22,7 +20,7 @@ const Login = () => {
         />
         <button className="loginButton">Se connecter</button>
       </form>
-      <button className="loginRegisterButton">S'enregistrer'</button>
+      <button className="loginRegisterButton">S'enregistrer</button>
     </div>
   );
 };
