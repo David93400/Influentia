@@ -1,30 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './post.css';
 
-const Post = () => {
+const Post = ({post}) => {
+  
   return (
     <div className="post">
-      <img
-        className="postImg"
-        src="https://images.unsplash.com/photo-1638913662380-9799def8ffb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-        alt="postimg"
-      />
+      {post.photo && <img className="postImg" src={post.photo} alt="postimg" />}
       <div className="postInfo">
-        <span className="postTitle">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit
-        </span>
+        <Link className='link' to={`/post/${post._id}`}>
+          <span className="postTitle">{post.title}</span>
+        </Link>
         <hr />
-        <span className="postDate">Il y a 1h</span>
+        <span className="postDate">
+          {new Date(post.createdAt).toLocaleDateString('fr-FR')}
+        </span>
       </div>
-      <p className="postDescription">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam
-        debitis minus deleniti unde quam rem placeat, maiores beatae, soluta
-        architecto inventore neque libero molestiae accusamus odit error maxime
-        sit! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam
-        debitis minus deleniti unde quam rem placeat, maiores beatae, soluta
-        architecto inventore neque libero molestiae accusamus odit error maxime
-        sit!
-      </p>
+      <p className="postDescription">{post.description}</p>
     </div>
   );
 };

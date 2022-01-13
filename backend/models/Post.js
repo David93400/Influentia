@@ -6,12 +6,14 @@ const postSchema = mongoose.Schema(
     title: { type: String, unique: true, required: true },
 
     description: { type: String, required: true },
+ 
+    photo: {type: String, required: false},
 
     username: { type: String, required: true },
 
     prenium: { type: Boolean, required: true }
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 
