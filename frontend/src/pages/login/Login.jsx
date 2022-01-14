@@ -1,31 +1,58 @@
-import React from 'react';
+import axios from 'axios';
+import { useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Context } from '../../context/Context';
 import './login.css';
 
-const Login = () => {
+export default function Login() {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const { dispatch, isFetching } = useContext(Context);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch({ type: 'LOGIN_START' });
+    try {
+      const res = await axios.post('http://localhost:3000/api/auth/login', {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
+    } catch (err) {
+      dispatch({ type: 'LOGIN_FAILURE' });
+    }
+  };
+
+
+
   return (
     <div className="login">
-      <h2 className="loginTitle">Connection</h2>
-      <form className="loginForm">
+      <span className="loginTitle">Login</span>
+      <form className="loginForm" onSubmit={handleSubmit}>
         <label>Email</label>
         <input
           type="text"
           className="loginInput"
-          placeholder="Entrer votre email ..."
+          placeholder="Enter your username..."
+          ref={emailRef}
         />
-        <label>Mot de passe</label>
+        <label>Password</label>
         <input
-          type="text"
+          type="password"
           className="loginInput"
-          placeholder="Entrer votre mot de passe ..."
+          placeholder="Enter your password..."
+          ref={passwordRef}
         />
-        <button className="loginButton">Se connecter</button>
+        <button className="loginButton" type="submit" disabled={isFetching}>
+          Login
+        </button>
       </form>
       <button className="loginRegisterButton">
-        <Link className='link' to="/register">S'enregistrer</Link>
+        <Link className="link" to="/register">
+          Register
+        </Link>
       </button>
     </div>
   );
-};
-
-export default Login;
+}

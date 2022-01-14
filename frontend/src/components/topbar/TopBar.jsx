@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Context } from '../../context/Context';
 import './topbar.css';
 
 const TopBar = () => {
-  const user = false;
+  let admin;
+  const { user, dispatch } = useContext(Context);
+  
+  if (user) {
+    admin = user.isAdmin;
+  }
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
+
   return (
     <>
       <div className="top">
@@ -33,13 +44,15 @@ const TopBar = () => {
               </Link>
             </li>
             <li className="topListItem">
-              {user && (
+              {admin && (
                 <Link className="link" to="/write ">
                   ECRIRE
                 </Link>
               )}
             </li>
-            <li className="topListItem">{user && 'SE DECONNECTER'}</li>
+            <li className="topListItem" onClick={handleLogout}>
+              {user && 'SE DECONNECTER'}
+            </li>
           </ul>
         </div>
 
