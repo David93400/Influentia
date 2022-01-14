@@ -14,23 +14,18 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
+  const newPost = new Post(req.body);
 
-    const newPost = new Post(req.body);
-
-    newPost
-      .save()
-      .then(() => res.status(201).json({ message: 'post enregistré' }))
-      .catch((error) => res.status(400).json({ error }));
-
+  newPost
+    .save()
+    .then(() => res.status(201).json(newPost))
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.updatePost = (req, res, next) => {
   const postObject = req.body;
 
-  Post.updateOne(
-    { _id: req.params.id },
-    { ...postObject, _id: req.params.id }
-  )
+  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
     .then(res.status(200).json({ message: 'post modifié' }))
     .catch((error) => res.status(400).json({ error }));
 };
@@ -38,13 +33,9 @@ exports.updatePost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      
-        Post.deleteOne({ _id: req.params.id })
-          .then(res.status(200).json({ message: 'post supprimé' }))
-          .catch((error) => res.status(400).json({ error }));
-      
+      Post.deleteOne({ _id: req.params.id })
+        .then(res.status(200).json({ message: 'post supprimé' }))
+        .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
 };
-
-

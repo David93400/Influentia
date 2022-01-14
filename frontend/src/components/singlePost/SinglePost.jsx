@@ -5,6 +5,9 @@ import './singlePost.css';
 import axios from "axios"
 
 const SinglePost = () => { 
+
+  const PF = 'http://localhost:3000/images/';
+
   const location = useLocation()
   const path = (location.pathname.split('/')[2]);
   const [post, setPost] = useState({})
@@ -16,12 +19,14 @@ const SinglePost = () => {
     }
     getPost()
   }, [path])
+
+  
   return (
     <div className="singlePost">
       <div className="singlePostWrapper">
         {post.photo && (
           <img
-            src={post.photo}
+            src={PF + post.photo}
             alt="singlepostimage"
             className="singlePostImg"
           />
@@ -41,9 +46,7 @@ const SinglePost = () => {
             {new Date(post.createdAt).toLocaleDateString('fr-FR')}
           </span>
         </div>
-        <p className="singlePostDescription">
-          {post.description}
-        </p>
+        <p className="singlePostDescription">{post.description}</p>
       </div>
     </div>
   );

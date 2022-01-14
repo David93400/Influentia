@@ -6,17 +6,19 @@ const multer = require('multer')
 
 require('dotenv').config();
 
+
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 
 const app = express();
+app.use('/images', express.static(path.join(__dirname, '/images')));
 
 
 
 // CORS configuration
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*'); 
   res.setHeader(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
@@ -54,9 +56,7 @@ const storage = multer.diskStorage({
     cb(null, 'images');
   },
   filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
+    callback(null, req.body.name);
   },
 });
 

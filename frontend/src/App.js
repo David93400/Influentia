@@ -10,6 +10,10 @@ import { Context } from "./context/Context";
 
 function App() {
   const { user } = useContext(Context);
+  let admin;
+  if (user) {
+    admin = user.isAdmin;
+  }
 
   console.log(user);
   
@@ -22,7 +26,7 @@ function App() {
         </Route>
         <Route path="/register">{user ? <Home /> : <Register />}</Route>
         <Route path="/login">{user ? <Home /> : <Login />}</Route>
-        <Route path="/write">{user ? <Write /> : <Register />}</Route>
+        <Route path="/write">{admin ? <Write /> : <Home />}</Route>
         <Route path="/post/:postId">
           <Single />
         </Route>

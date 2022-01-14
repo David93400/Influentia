@@ -11,7 +11,7 @@ const postSchema = mongoose.Schema(
 
     username: { type: String, required: true },
 
-    prenium: { type: Boolean, required: true }
+    // prenium: { type: Boolean, required: true }
   },
   { timestamps: true }
 );

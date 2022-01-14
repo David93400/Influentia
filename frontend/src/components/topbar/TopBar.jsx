@@ -6,7 +6,7 @@ import './topbar.css';
 const TopBar = () => {
   let admin;
   const { user, dispatch } = useContext(Context);
-  
+
   if (user) {
     admin = user.isAdmin;
   }
@@ -45,7 +45,7 @@ const TopBar = () => {
             </li>
             <li className="topListItem">
               {admin && (
-                <Link className="link" to="/write ">
+                <Link className="link" to="/write">
                   ECRIRE
                 </Link>
               )}

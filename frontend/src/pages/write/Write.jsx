@@ -1,38 +1,74 @@
-import React from 'react';
-import './write.css'
+import { useContext, useState } from 'react';
+import './write.css';
+import axios from 'axios';
+import { Context } from '../../context/Context';
 
-const Write = () => {
-    return (
-      <div className="write">
-        <img
-          className="writeImg"
-          src="https://images.unsplash.com/photo-1638913662380-9799def8ffb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-          alt="postimg"
-        />
-        <form className="writeForm">
-          <div className="writeFormGroup">
-            <label htmlFor="fileInput">
-              <i className="writeIcon fas fa-plus"></i>
-            </label>
-            <input type="file" id="fileInput" style={{ display: 'none' }} />
-            <input
-              type="text"
-              placeholder="Titre"
-              className="writeInput"
-              autoFocus={true}
-            />
-          </div>
-          <div className="writeFormGroup">
-            <textarea
-              placeholder="Rédiger votre article ici.."
-              type="text"
-              className="writeInput writeText"
-            ></textarea>
-          </div>
-          <button className="writeSubmit">Publier</button>
-        </form>
-      </div>
-    );
-};
+export default function Write() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState(null);
+  const { user } = useContext(Context);
 
-export default Write;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newPost = {
+      username: user.userName,
+      title,
+      description,
+    };
+    if (file) {
+      const data = new FormData();
+      const filename = Date.now() + file.name;
+      data.append('name', filename);
+      data.append('file', file);
+      newPost.photo = filename;
+      try {
+        await axios.post('http://localhost:3000/api/upload', data);
+      } catch (err) {}
+    }
+    try {
+      
+      const res = await axios.post('http://localhost:3000/api/posts/', newPost);
+      console.log(res);
+      window.location.replace('http://localhost:3001/post/' + res.data._id);
+    } catch (err) {}
+  };
+  return (
+    <div className="write">
+      {file && (
+        <img className="writeImg" src={URL.createObjectURL(file)} alt="" />
+      )}
+      <form className="writeForm" onSubmit={handleSubmit}>
+        <div className="writeFormGroup">
+          <label htmlFor="fileInput">
+            <i className="writeIcon fas fa-plus"></i>
+          </label>
+          <input
+            type="file"
+            id="fileInput"
+            style={{ display: 'none' }}
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <input
+            type="text"
+            placeholder="Title"
+            className="writeInput"
+            autoFocus={true}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="writeFormGroup">
+          <textarea
+            placeholder="Tell your story..."
+            type="text"
+            className="writeInput writeText"
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </div>
+        <button className="writeSubmit" type="submit">
+          Publish
+        </button>
+      </form>
+    </div>
+  );
+}
